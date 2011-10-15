@@ -9,6 +9,7 @@
 
 // Import the interfaces
 #import "MZNHRouletteLayer.h"
+#import "MZNHDocumentationLayer.h"
 
 
 #define TCELL_SCALE 0.7
@@ -43,26 +44,31 @@
         score = 0;
 		nextTcellZOrder = 1;
 		totalTime = 0.0;
-        
+
         // CC touch handling
 		[[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
-		CGSize size = [[CCDirector sharedDirector] winSize];
-        scoreLabel = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"SCORE: %d",score] dimensions:CGSizeMake(120, 40) alignment:UITextAlignmentLeft fontName:@"Futura-Medium" fontSize:20];
-        scoreLabel.position = ccp(70, 295);
-        
+
+        scoreLabel = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"SCORE: %d",score] dimensions:CGSizeMake(120, 40) alignment:UITextAlignmentLeft fontName:@"Futura-Medium" fontSize:20.0];
+        scoreLabel.position = ccp(100, 295);
         [self addChild:scoreLabel];
-        
+		docsButtonLabel = [CCLabelTTF labelWithString: @"?" dimensions:CGSizeMake(40,40) alignment:UITextAlignmentCenter fontName:@"Futura-Medium" fontSize: 20.0];
+		docsButtonLabel.color = ccc3(230,80,50);
+		docsButtonLabel.position = ccp(20, 295);
+		[self addChild:docsButtonLabel];
+
+		CGSize size = [[CCDirector sharedDirector] winSize];
+
         // Adds and scales APC
         apc = [CCSprite spriteWithFile:@"MZNH_APC.png"];
         //apc.color = ccc3(150, 50, 255);
         //apc.color = ccc3(150, 0, 200); purple
-        apc.color = ccc3(255,0,0);
+        apc.color = ccc3(230,80,50);
         apc.scale = APC_SCALE;
         apc.position = ccp(660, size.height/2);
         apcRadius = apc.boundingBox.size.width/2;
-        
+
         [self addChild:apc];
-        
+
         // Loads APC with receptors
 		NSArray *peptides = [[[NSArray arrayWithArray:[MZNHAPCReceptorSprite peptideNames]]
 							  arrayByAddingObjectsFromArray: [MZNHAPCReceptorSprite peptideNames]]
@@ -126,8 +132,8 @@
 //Handles double tap
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
+	[self selectSpriteForTouch:touchLocation];
     if (touch.tapCount == 2) {
-        [self selectSpriteForTouch:touchLocation];
 		BOOL dirty;
 		if (selSprite.autoreactive) {
 			dirty = NO;
@@ -135,7 +141,17 @@
 			dirty = selSprite.functional;
 		}
         [self removeCell:selSprite dirty:dirty];
-    }
+    } else if (touch.tapCount == 1) {
+		if (selSprite == nil) {
+			CGRect docsButtonRect = CGRectNull;
+			docsButtonRect.size = docsButtonLabel.contentSize;
+			docsButtonRect.origin = docsButtonLabel.position;
+			if (CGRectContainsPoint(docsButtonRect, touchLocation)) {
+				// The user hit the help button-- and probably meant it!
+				[[CCDirector sharedDirector] pushScene: [MZNHDocumentationLayer scene]];
+			}
+		}
+	}
 	selSprite = nil;
 }
 
