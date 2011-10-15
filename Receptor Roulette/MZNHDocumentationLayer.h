@@ -8,7 +8,7 @@
 
 #import "cocos2d.h"
 
-@interface MZNHDocumentationLayer : CCLayer {
+@interface MZNHDocumentationLayer : CCLayer <UIWebViewDelegate> {
 	UIWebView * webView;
 }
 
