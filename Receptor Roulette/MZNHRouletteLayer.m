@@ -262,7 +262,7 @@
 - (void)onEnter {
 	[super onEnter];
 	[self scheduleUpdate];
-	[self schedule: @selector(spawnTCell:) interval: 1.2];
+	[self schedule: @selector(spawnTCell:) interval: 0.2];
     [self schedule: @selector(cleanAPC) interval: 5];
 
 }
