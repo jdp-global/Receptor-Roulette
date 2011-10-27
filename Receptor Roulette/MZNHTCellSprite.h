@@ -12,7 +12,7 @@
 /** A CCSprite with additional information about TCells */
 @interface MZNHTCellSprite : CCSprite {
     NSString * peptide;
-    BOOL autoreactive;
+    BOOL isHelper;
 	BOOL functional;
 }
 
@@ -20,7 +20,7 @@
  See +[MZNHTCellSprite peptideNames] for valid peptides. */
 @property(nonatomic, retain) NSString *peptide;
 /** Autoreactive TCells should not be selected for */
-@property(nonatomic) BOOL autoreactive;
+@property(nonatomic) BOOL isHelper;
 /** Nonfunctional TCells do not have a coreceptor and should not be selected for */
 @property(nonatomic) BOOL functional;
 

@@ -15,14 +15,14 @@
  MZNH_Tc_[peptide][functional_flag].png
  [functional_flag] should be an underscore character (_) if
  the TCell is not functional */
-static NSString * spriteFilenameFormat = @"MZNH_Tc_%@%@.png";
+static NSString * spriteFilenameFormat = @"MZNH_Tc_%@%@%@.png";
 
 /** The peptideNames array is lazily populated in +peptideNames below */
 static NSArray * peptideNames = nil;
 
 @implementation MZNHTCellSprite
 
-@synthesize peptide, autoreactive, functional;
+@synthesize peptide, isHelper, functional;
 
 + (MZNHTCellSprite *) randomTCellSprite {
 	// Pick a random peptide name
@@ -30,29 +30,26 @@ static NSArray * peptideNames = nil;
 	NSString * peptideName = [[MZNHTCellSprite peptideNames] objectAtIndex: i];
 
 	// There is an arbitrary 7-in-20 (35%) chance a TCell is nonfunctional
-	BOOL functional = (random() % 20 > 7 ) ? YES : NO;
+	BOOL functional = (random() % 20 < 7 ) ? YES : NO;
+	BOOL isHelper = NO;
+	// And an arbitrary 1-in-5 (20%) chance a TCell is a helper TCell instead of a killer TCell
+	if (functional & (random() % 5 < 1))
+		isHelper = YES;
 
 	// The sprite is initalized with the appropriate imagename.
 	// cocos2d will handle caching sprites.
 	MZNHTCellSprite * cell = [MZNHTCellSprite spriteWithFile:
 							  [NSString stringWithFormat: spriteFilenameFormat,
-							   peptideName, (functional ? @"" : @"_")]];
+							   peptideName, (functional ? @"" : @"_"), (isHelper ? @"" : @"CD4")]];
 	cell.peptide = peptideName;
 	cell.functional = functional;
+	cell.isHelper = isHelper;
 
 	// Place the sprite randomly along the left edge of the screen
 	CGSize size = [[CCDirector sharedDirector] winSize];
 	cell.position = ccp(0.0, ((float)arc4random()/ARC4RANDOM_MAX) *
 						(size.height - cell.contentSize.height * 2)
 						+ cell.contentSize.height );
-
-    // There is an arbitrary 4-in-20 (20%) chance that a TCell is autoreactive
-	// and therefore nonfunctional. We discolor it.
-	if (random()%20 < 4) {
-        cell.autoreactive = YES;
-		cell.functional = NO;
-        cell.color = ccc3(255, 120, 0);
-    }
 
 	return cell;
 }

@@ -135,7 +135,7 @@
 	[self selectSpriteForTouch:touchLocation];
     if (touch.tapCount == 2) {
 		BOOL dirty;
-		if (selSprite.autoreactive) {
+		if (selSprite.isHelper) {
 			dirty = NO;
 		} else {
 			dirty = selSprite.functional;
