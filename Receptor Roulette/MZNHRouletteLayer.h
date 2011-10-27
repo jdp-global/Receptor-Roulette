@@ -32,6 +32,7 @@
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;
+-(BOOL)tCellCollidesWithReceptor:(MZNHTCellSprite *)cell;
 -(CGFloat)angleAtPosition:(CGPoint)position;
 -(void)spawnTCell:(ccTime)dt;
 

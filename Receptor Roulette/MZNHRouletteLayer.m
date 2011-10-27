@@ -90,6 +90,7 @@
 		CFBundleRef bundle = CFBundleGetMainBundle();
 		CFURLRef res = CFBundleCopyResourceURL(bundle, CFSTR("Pop1"), CFSTR("wav"), NULL);
 		AudioServicesCreateSystemSoundID(res, &popSoundID);
+		CFRelease(res);
 	}
 	return self;
 }
@@ -134,13 +135,9 @@
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
 	[self selectSpriteForTouch:touchLocation];
     if (touch.tapCount == 2) {
-		BOOL dirty;
-		if (selSprite.isHelper) {
-			dirty = NO;
-		} else {
-			dirty = selSprite.functional;
+		if (selSprite) {
+			[self removeCell:selSprite dirty:(selSprite.functional || selSprite.isHelper)];
 		}
-        [self removeCell:selSprite dirty:dirty];
     } else if (touch.tapCount == 1) {
 		if (selSprite == nil) {
 			CGRect docsButtonRect = CGRectNull;
@@ -168,6 +165,9 @@
         CGPoint newPos = ccpAdd(selSprite.position, translation);
         selSprite.position = newPos;
         selSprite.rotation = [self angleAtPosition:newPos];
+		if ([self tCellCollidesWithReceptor: selSprite]) {
+			selSprite = nil;
+		}
     }  
 }
 
@@ -196,21 +196,9 @@
                 [self removeChild:cell cleanup:YES];
                 [rec addChild:newSprite];
                 score += 2;
-                break;
+                return YES;
             }
-            else {
-                [self removeCell:cell dirty:YES];
-            }
-			return YES;
 		}
-    }
-    return NO;
-}
-
-- (BOOL)tCellCollidesWithAPC:(MZNHTCellSprite *)cell {
-    if (ccpDistance(cell.position, apc.position) < apcRadius+20) {
-        [self removeCell:cell dirty:YES];
-        return YES;
     }
     return NO;
 }
@@ -230,10 +218,6 @@
             [self removeChild: cell cleanup:YES];
             break;
         }
-        
-        //T-Cell Intersection
-        if ([self tCellCollidesWithAPC:cell]) break;
-        if([self tCellCollidesWithReceptor:cell]) break;
 	}
 }
 
@@ -262,7 +246,7 @@
 - (void)onEnter {
 	[super onEnter];
 	[self scheduleUpdate];
-	[self schedule: @selector(spawnTCell:) interval: 0.2];
+	[self schedule: @selector(spawnTCell:) interval: 0.35];
     [self schedule: @selector(cleanAPC) interval: 5];
 
 }

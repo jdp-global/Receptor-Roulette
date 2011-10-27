@@ -63,7 +63,7 @@
 }
 
 - (void) dealloc {
-	[self.webView release];
+	self.webView = nil;
 	[super dealloc];
 }
 
