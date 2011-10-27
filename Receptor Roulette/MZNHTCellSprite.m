@@ -31,13 +31,13 @@ static NSArray * peptideNames = nil;
 	
 	BOOL functional = YES;
 	BOOL isHelper = NO;
-	// There is an arbitrary 7-in-20 (35%) chance a TCell is CD4+
+	// There is an arbitrary 1-in-6 (16.7%) chance a TCell is CD4+
 	// i.e. is a helper TCell instead of a killer TCell
-	if (random() % 20 < 7) {
+	if (random() % 6 < 1) {
 		functional = NO;
 		isHelper = YES;
-	// And an arbitrary 1-in-5 (20%) chance a TCell is nonfunctional
-	} else if (random() % 5 < 1) {
+	// And an arbitrary 1-in-4 (20%) chance a TCell is nonfunctional
+	} else if (random() % 4 < 1) {
 		functional = NO;
 	}
 
