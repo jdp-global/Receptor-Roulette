@@ -54,8 +54,8 @@
         scoreLabel = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"SCORE: %d/%d",score,MAX_SCORE] dimensions:CGSizeMake(160, 40) alignment:UITextAlignmentLeft fontName:@"Futura-Medium" fontSize:20];
         scoreLabelShadow = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"SCORE: %d/%d",score,MAX_SCORE] dimensions:CGSizeMake(160, 40) alignment:UITextAlignmentLeft fontName:@"Futura-Medium" fontSize:20];
         
-        scoreLabel.position = ccp(85, 295);
-        scoreLabelShadow.position = ccp(86, 294);
+        scoreLabel.position = ccp(115, 295);
+        scoreLabelShadow.position = ccp(116, 294);
         
         scoreLabel.color = ccc3(255, 255, 0);
         scoreLabelShadow.color = ccc3(30, 30, 30);
