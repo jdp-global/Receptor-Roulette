@@ -32,3 +32,5 @@ The game mechanics are structured rather simply, with three important classes.
 +	**MZNHRouletteLayer:**
 		Manages the creation, movement, touching, dragging, matching, and removal of sprites and receptors.
 		Most of the logic is here, with data in the previous two classes.
++	**MZNHDocumentationLayer:**
+		Shows the HTML files with documentation
