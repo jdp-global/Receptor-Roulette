@@ -14,6 +14,7 @@
 
 #define TCELL_SCALE 0.7
 #define APC_SCALE 0.50
+#define MAX_SCORE 30
 
 // HelloWorldLayer implementation
 @implementation MZNHRouletteLayer
@@ -47,16 +48,24 @@
 
         // CC touch handling
 		[[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
-
-        scoreLabel = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"SCORE: %d",score] dimensions:CGSizeMake(120, 40) alignment:UITextAlignmentLeft fontName:@"Futura-Medium" fontSize:20.0];
-        scoreLabel.position = ccp(100, 295);
+		CGSize size = [[CCDirector sharedDirector] winSize];
+        
+        //Score label with shadow
+        scoreLabel = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"SCORE: %d/%d",score,MAX_SCORE] dimensions:CGSizeMake(160, 40) alignment:UITextAlignmentLeft fontName:@"Futura-Medium" fontSize:20];
+        scoreLabelShadow = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"SCORE: %d/%d",score,MAX_SCORE] dimensions:CGSizeMake(160, 40) alignment:UITextAlignmentLeft fontName:@"Futura-Medium" fontSize:20];
+        
+        scoreLabel.position = ccp(85, 295);
+        scoreLabelShadow.position = ccp(86, 294);
+        
+        scoreLabel.color = ccc3(255, 255, 0);
+        scoreLabelShadow.color = ccc3(30, 30, 30);
+        
+        [self addChild:scoreLabelShadow];
         [self addChild:scoreLabel];
 		docsButtonLabel = [CCLabelTTF labelWithString: @"?" dimensions:CGSizeMake(40,40) alignment:UITextAlignmentCenter fontName:@"Futura-Medium" fontSize: 20.0];
 		docsButtonLabel.color = ccc3(230,80,50);
 		docsButtonLabel.position = ccp(20, 295);
 		[self addChild:docsButtonLabel];
-
-		CGSize size = [[CCDirector sharedDirector] winSize];
 
         // Adds and scales APC
         apc = [CCSprite spriteWithFile:@"MZNH_APC.png"];
@@ -95,6 +104,37 @@
 	return self;
 }
 
+// Updates the score CCLabel and checks for end-of-game
+- (void)updateScore {
+    [scoreLabel setString:[NSString stringWithFormat:@"SCORE: %d/%d",score,MAX_SCORE]];
+    [scoreLabelShadow setString:[NSString stringWithFormat:@"SCORE: %d/%d",score,MAX_SCORE]];
+    
+    float r_health = 1;
+    float g_health = 1;
+    if (score < 0) g_health = 1 + (float) score/MAX_SCORE;
+    else if (score > 0) r_health = 1 - (float) score/MAX_SCORE;
+    int r = MAX(0,r_health * 255);
+    int g = MAX(0,g_health * 255);
+    scoreLabel.color = ccc3(r,g,0);
+
+    if (score >= MAX_SCORE) {
+        [self unscheduleUpdate];
+        [self unschedule: @selector(spawnTCell:)];
+        [self unschedule: @selector(cleanAPC)];
+        CCSprite *win = [CCSprite spriteWithFile:@"MZNHWin.png"];
+        win.position = ccp(200,150);
+        [self addChild:win z:500];
+    }
+    if (score <= -MAX_SCORE) {
+        [self unscheduleUpdate];
+        [self unschedule: @selector(spawnTCell:)];
+        [self unschedule: @selector(cleanAPC)];
+        CCSprite *lose = [CCSprite spriteWithFile:@"MZNHLose.png"];
+        lose.position = ccp(200,150);
+        [self addChild:lose z:500];
+    }
+    else return;
+}
 
 // Finds sprite that has been touched, respects z-order
 - (void)selectSpriteForTouch:(CGPoint)touchLocation {
@@ -112,6 +152,7 @@
     }
 }
 
+// Removes cell from screen/memory with pop-out scale and color change. Decreases score if cell should have been matched.
 - (void)removeCell:(MZNHTCellSprite *)cell dirty:(BOOL)dirty {
     if (dirty) cell.color = ccc3(200, 0, 0);
     else cell.color = ccc3(0, 200, 0);
@@ -120,8 +161,14 @@
     [cell runAction:scaleAction];
 
     [tcellSprites removeObject:cell];
-    if (dirty) score--;
-    else AudioServicesPlaySystemSound(popSoundID);
+    if (dirty) {
+		score--;
+	} else {
+		score++;
+		AudioServicesPlaySystemSound(popSoundID);
+	}
+    [self updateScore];
+    
 }
 
 //On touchDownInside, 'selects' sprite
@@ -196,6 +243,7 @@
                 [self removeChild:cell cleanup:YES];
                 [rec addChild:newSprite];
                 score += 2;
+                [self updateScore];
                 return YES;
             }
 		}
@@ -206,7 +254,7 @@
 - (void)update:(ccTime)dt {
 	CGSize size = [[CCDirector sharedDirector] winSize];
     apc.rotation -= .3;
-    [scoreLabel setString:[NSString stringWithFormat:@"SCORE: %d",score]];
+    
     
 	for (MZNHTCellSprite *cell in tcellSprites) {
         // T-Cell Motion
@@ -221,7 +269,7 @@
 	}
 }
 
-
+// T cell spawning. Increases with time.
 - (void) spawnTCell: (ccTime) dt {
 	totalTime += dt;
 	float frac = (float)random() / RAND_MAX;
@@ -235,6 +283,7 @@
 		[self addChild: cell z: nextTcellZOrder++];
 	}
 }
+// Removes attached T-cells from APC 
 - (void)cleanAPC {
     for (MZNHAPCReceptorSprite *rec in receptorSprites) {
         CGPoint recPos = [rec.parent convertToWorldSpace:rec.position];
@@ -243,6 +292,7 @@
     }
 }
 
+// Cocos 2d scheduling
 - (void)onEnter {
 	[super onEnter];
 	[self scheduleUpdate];

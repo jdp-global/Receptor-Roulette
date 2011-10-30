@@ -25,6 +25,8 @@
 		0AEE10921459C3180055470A /* MZNH_Tch_TP_-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AEE108D1459C3180055470A /* MZNH_Tch_TP_-hd.png */; };
 		9B18134E1391ED0F0077A8AB /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B18134D1391ED0F0077A8AB /* Default@2x.png */; };
 		9B19B07C1384679000EEA05E /* MZNHTCellSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B19B07B1384679000EEA05E /* MZNHTCellSprite.m */; };
+		9B245CB1139990D800BDA2AE /* MZNHLose.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B245CAF139990D800BDA2AE /* MZNHLose.png */; };
+		9B245CB2139990D800BDA2AE /* MZNHWin.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B245CB0139990D800BDA2AE /* MZNHWin.png */; };
 		9B4D351013934BCE00597948 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B4D350F13934BCE00597948 /* Default.png */; };
 		9B728751139191E2003D62B8 /* MZNH_APC_SB-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B72873E139191E2003D62B8 /* MZNH_APC_SB-hd.png */; };
 		9B728752139191E2003D62B8 /* MZNH_APC_SG-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B72873F139191E2003D62B8 /* MZNH_APC_SG-hd.png */; };
@@ -199,6 +201,8 @@
 		9B18134D1391ED0F0077A8AB /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
 		9B19B07A1384679000EEA05E /* MZNHTCellSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MZNHTCellSprite.h; sourceTree = "<group>"; };
 		9B19B07B1384679000EEA05E /* MZNHTCellSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MZNHTCellSprite.m; sourceTree = "<group>"; };
+		9B245CAF139990D800BDA2AE /* MZNHLose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MZNHLose.png; sourceTree = "<group>"; };
+		9B245CB0139990D800BDA2AE /* MZNHWin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MZNHWin.png; sourceTree = "<group>"; };
 		9B4D350F13934BCE00597948 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		9B72873E139191E2003D62B8 /* MZNH_APC_SB-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MZNH_APC_SB-hd.png"; sourceTree = "<group>"; };
 		9B72873F139191E2003D62B8 /* MZNH_APC_SG-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MZNH_APC_SG-hd.png"; sourceTree = "<group>"; };
@@ -645,6 +649,8 @@
 			isa = PBXGroup;
 			children = (
 				0A4E03261448FD5600E82CE1 /* Documentation */,
+				9B245CAF139990D800BDA2AE /* MZNHLose.png */,
+				9B245CB0139990D800BDA2AE /* MZNHWin.png */,
 				0A2A1CAA138EA426001DE97C /* Pop1.wav */,
 				9B9393101391EDB400FB1E0F /* icon-hd.png */,
 				9B93930E1391EDAC00FB1E0F /* icon-sm.png */,
@@ -1017,6 +1023,8 @@
 				0AEE10901459C3180055470A /* MZNH_Tch_SP_-hd.png in Resources */,
 				0AEE10911459C3180055470A /* MZNH_Tch_TG_-hd.png in Resources */,
 				0AEE10921459C3180055470A /* MZNH_Tch_TP_-hd.png in Resources */,
+				9B245CB1139990D800BDA2AE /* MZNHLose.png in Resources */,
+				9B245CB2139990D800BDA2AE /* MZNHWin.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
