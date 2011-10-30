@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "GameConfig.h"
 #import "MZNHRouletteLayer.h"
+#import "MZNHDocumentationLayer.h"
 #import "RootViewController.h"
 
 @implementation AppDelegate
@@ -109,8 +110,9 @@
 	// Removes the startup flicker
 	[self removeStartupFlicker];
 	
-	// Run the intro Scene
-	[[CCDirector sharedDirector] runWithScene: [MZNHRouletteLayer scene]];
+	// Set up the scenes & run
+	[[CCDirector sharedDirector] pushScene: [MZNHRouletteLayer scene]];
+	[[CCDirector sharedDirector] runWithScene: [MZNHDocumentationLayer scene]];
 }
 
 
